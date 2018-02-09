@@ -43,8 +43,16 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.activity.StudentListActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
 import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.model.TeacherCreateNew;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,6 +72,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private String toTime;
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
 
+
   public TeacherSubmissionFragment() {
     // Required empty public constructor
   }
@@ -77,6 +86,7 @@ public class TeacherSubmissionFragment extends Fragment {
 
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
+    final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
     isFabOpen = false;
     fromSelected = false;
@@ -325,6 +335,19 @@ public class TeacherSubmissionFragment extends Fragment {
 
                 }
               });
+            Call<TeacherCreateNew> call = apiService.sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
+                    batchSpinner.getSelectedItem().toString(),fromTime,toTime);
+             call.enqueue(new Callback<TeacherCreateNew>() {
+                 @Override
+                 public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
+                     Toast.makeText(getContext(), "Submission successful", Toast.LENGTH_SHORT).show();
+                 }
+
+                 @Override
+                 public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
+                     Toast.makeText(getContext(), "Submission failed", Toast.LENGTH_SHORT).show();
+                 }
+             });
           builder.show();
         } else {
           Toast.makeText(getContext(), "Please select all fields.", Toast.LENGTH_SHORT).show();

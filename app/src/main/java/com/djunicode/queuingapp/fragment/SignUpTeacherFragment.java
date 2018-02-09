@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,15 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
+import com.djunicode.queuingapp.model.Teacher;
+import com.djunicode.queuingapp.model.TeacherCreateNew;
+import com.djunicode.queuingapp.model.TeacherForId;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +40,7 @@ public class SignUpTeacherFragment extends Fragment {
   private TextInputLayout teacherSignUpinputLayoutUsername, teacherSignUpinputLayoutPassword,
       teacherSignUpinputLayoutDepartment, teacherSignUpinputLayoutSAPId;
   SessionManager session;
+  final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
   public SignUpTeacherFragment() {
     // Required empty public constructor
@@ -58,6 +69,7 @@ public class SignUpTeacherFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if(validSubmission()) {
+          getIdforTeacher();
           session.createLoginSession(usernameTeacherEditText.getText().toString(),
               passwordTeacherEditText.getText().toString());
           Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
@@ -73,7 +85,35 @@ public class SignUpTeacherFragment extends Fragment {
 
     return view;
   }
+  private void getIdforTeacher(){
+    Call<TeacherForId> call = apiService.getTeacherId(usernameTeacherEditText.getText().toString(),passwordTeacherEditText.getText().toString());
+    call.enqueue(new Callback<TeacherForId>() {
+      @Override
+      public void onResponse(Call<TeacherForId> call, Response<TeacherForId> response) {
+        Log.i("idFromServer", Integer.toString(response.body().getId()));
+        sendTeacherDataToServer(response.body().getId());
+      }
+   private  void sendTeacherDataToServer(int id){
+        Call<Teacher> call = apiService.createTeacherAccount(id,usernameTeacherEditText.getText().toString(),sapIDTeacherEditText.getText().toString(),departmentTeacherSpinner.getSelectedItem().toString());
+        call.enqueue(new Callback<Teacher>() {
+          @Override
+          public void onResponse(Call<Teacher> call, Response<Teacher> response) {
+            //Check here for valid response
+          }
 
+          @Override
+          public void onFailure(Call<Teacher> call, Throwable t) {
+
+          }
+        });
+   }
+
+      @Override
+      public void onFailure(Call<TeacherForId> call, Throwable t) {
+
+      }
+    });
+  }
   private Boolean validSubmission () {
 
     if (!validateUsername()) {
