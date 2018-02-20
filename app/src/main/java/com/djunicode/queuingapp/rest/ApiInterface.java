@@ -51,9 +51,9 @@ public interface ApiInterface {
   Call<Teacher> createTeacherAccount(@Field("user") int user_id, @Field("name") String username, @Field("password") String password,
                                      @Field("sapID") String sapId, @Field("department") String department);
 
-  @FormUrlEncoded
-  @GET("queues/users/")
-  Call<TeacherForId> getTeacherId (@Field("username") String username, @Field("password") String password);
+//  @FormUrlEncoded
+//  @POST("queues/teacher/") //Check
+//  Call<TeacherForId> getTeacherId (@Path("username") String username, @Path("password") String password);
 
   @FormUrlEncoded
   @POST("queues/queue")
@@ -61,8 +61,8 @@ public interface ApiInterface {
                                             @Field("from") String from, @Field("to") String to);
 
   @GET("queues/queue")
-  Call<RecentEvents> getQueueId(@Field("subject") String subject, @Field("batch") String batch,
-                                @Field("from") String from, @Field("to") String to);
+  Call<RecentEvents> getQueueId(@Path("subject") String subject, @Path("batch") String batch,
+                                @Path("from") String from, @Path("to") String to);
 
   @DELETE("queues/queue/{id}/")
   Call<RecentEvents> deleteRecentEvent(@Path("id") int id);

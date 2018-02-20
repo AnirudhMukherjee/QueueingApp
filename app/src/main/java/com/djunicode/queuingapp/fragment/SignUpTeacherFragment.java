@@ -90,14 +90,15 @@ public class SignUpTeacherFragment extends Fragment {
 
     return view;
   }
-  private void getIdforTeacher(){
-    Call<TeacherForId> call = apiService.getTeacherId(usernameTeacherEditText.getText().toString(),password);
-    call.enqueue(new Callback<TeacherForId>() {
-      @Override
-      public void onResponse(Call<TeacherForId> call, Response<TeacherForId> response) {
-        Log.i("idFromServer", Integer.toString(response.body().getId()));
-        sendTeacherDataToServer(response.body().getId());
-      }
+  private void getIdforTeacher() {
+//    Call<TeacherForId> call = apiService.getTeacherId(usernameTeacherEditText.getText().toString(),password);
+//    call.enqueue(new Callback<TeacherForId>() {
+//      @Override
+//      public void onResponse(Call<TeacherForId> call, Response<TeacherForId> response) {
+//        Log.i("idFromServer", Integer.toString(response.body().getId()));
+    sendTeacherDataToServer(56);
+//      }
+  }
    private  void sendTeacherDataToServer(int id){
         Call<Teacher> call = apiService.createTeacherAccount(id,usernameTeacherEditText.getText().toString(),password,sapIDTeacherEditText.getText().toString(),departmentTeacherSpinner.getSelectedItem().toString());
         call.enqueue(new Callback<Teacher>() {
@@ -113,12 +114,12 @@ public class SignUpTeacherFragment extends Fragment {
         });
    }
 
-      @Override
-      public void onFailure(Call<TeacherForId> call, Throwable t) {
-
-      }
-    });
-  }
+//      @Override
+//      public void onFailure(Call<TeacherForId> call, Throwable t) {
+//
+//      }
+//    });
+  
   private Boolean validSubmission () {
 
     if (!validateUsername()) {
