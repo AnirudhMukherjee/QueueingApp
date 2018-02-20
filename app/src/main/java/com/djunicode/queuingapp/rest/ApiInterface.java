@@ -1,6 +1,7 @@
 package com.djunicode.queuingapp.rest;
 
 import com.djunicode.queuingapp.model.LocationTeacher;
+import com.djunicode.queuingapp.model.RecentEvents;
 import com.djunicode.queuingapp.model.Student;
 import com.djunicode.queuingapp.model.StudentForId;
 import com.djunicode.queuingapp.model.Teacher;
@@ -46,8 +47,8 @@ public interface ApiInterface {
   Call<LocationTeacher> deleteTeacherLocation (@Path("id") int id);
 
   @FormUrlEncoded
-  @POST("queues/teachers/")
-  Call<Teacher> createTeacherAccount(@Field("user") int user_id, @Field("name") String username,
+  @POST("queues/teacher/")
+  Call<Teacher> createTeacherAccount(@Field("user") int user_id, @Field("name") String username, @Field("password") String password,
                                      @Field("sapID") String sapId, @Field("department") String department);
 
   @FormUrlEncoded
@@ -55,9 +56,16 @@ public interface ApiInterface {
   Call<TeacherForId> getTeacherId (@Field("username") String username, @Field("password") String password);
 
   @FormUrlEncoded
-  @POST("queues/newqueue")
+  @POST("queues/queue")
   Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject, @Field("batch") String batch,
                                             @Field("from") String from, @Field("to") String to);
+
+  @GET("queues/queue")
+  Call<RecentEvents> getQueueId(@Field("subject") String subject, @Field("batch") String batch,
+                                @Field("from") String from, @Field("to") String to);
+
+  @DELETE("queues/queue/{id}/")
+  Call<RecentEvents> deleteRecentEvent(@Path("id") int id);
 
 
 

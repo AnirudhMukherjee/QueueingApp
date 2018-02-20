@@ -19,6 +19,7 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
+import com.djunicode.queuingapp.customClasses.HashingPassword;
 import com.djunicode.queuingapp.model.Teacher;
 import com.djunicode.queuingapp.model.TeacherCreateNew;
 import com.djunicode.queuingapp.model.TeacherForId;
@@ -39,6 +40,8 @@ public class SignUpTeacherFragment extends Fragment {
   private CardView signUpTeacherButton;
   private TextInputLayout teacherSignUpinputLayoutUsername, teacherSignUpinputLayoutPassword,
       teacherSignUpinputLayoutDepartment, teacherSignUpinputLayoutSAPId;
+  private String password;
+  private String salt, intermediate_password, hashed_password;
   SessionManager session;
   final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
@@ -70,6 +73,8 @@ public class SignUpTeacherFragment extends Fragment {
       public void onClick(View v) {
         if(validSubmission()) {
           getIdforTeacher();
+          password = passwordTeacherEditText.getText().toString();
+          hash_password(password);
           session.createLoginSession(usernameTeacherEditText.getText().toString(),
               passwordTeacherEditText.getText().toString());
           Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
@@ -86,7 +91,7 @@ public class SignUpTeacherFragment extends Fragment {
     return view;
   }
   private void getIdforTeacher(){
-    Call<TeacherForId> call = apiService.getTeacherId(usernameTeacherEditText.getText().toString(),passwordTeacherEditText.getText().toString());
+    Call<TeacherForId> call = apiService.getTeacherId(usernameTeacherEditText.getText().toString(),password);
     call.enqueue(new Callback<TeacherForId>() {
       @Override
       public void onResponse(Call<TeacherForId> call, Response<TeacherForId> response) {
@@ -94,7 +99,7 @@ public class SignUpTeacherFragment extends Fragment {
         sendTeacherDataToServer(response.body().getId());
       }
    private  void sendTeacherDataToServer(int id){
-        Call<Teacher> call = apiService.createTeacherAccount(id,usernameTeacherEditText.getText().toString(),sapIDTeacherEditText.getText().toString(),departmentTeacherSpinner.getSelectedItem().toString());
+        Call<Teacher> call = apiService.createTeacherAccount(id,usernameTeacherEditText.getText().toString(),password,sapIDTeacherEditText.getText().toString(),departmentTeacherSpinner.getSelectedItem().toString());
         call.enqueue(new Callback<Teacher>() {
           @Override
           public void onResponse(Call<Teacher> call, Response<Teacher> response) {
@@ -206,5 +211,12 @@ public class SignUpTeacherFragment extends Fragment {
     if (view.requestFocus()) {
       getActivity().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
+  }
+  private void hash_password (String password) {
+
+    HashingPassword hashingPassword = new HashingPassword();
+    salt = hashingPassword.generate_salt();
+    intermediate_password = password + salt;
+    hashed_password = hashingPassword.hash_the_password(intermediate_password);
   }
 }

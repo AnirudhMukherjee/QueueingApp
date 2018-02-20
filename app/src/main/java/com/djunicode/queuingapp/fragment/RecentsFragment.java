@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.support.v7.widget.helper.ItemTouchHelper.SimpleCallback;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,19 +26,28 @@ import com.djunicode.queuingapp.adapter.RecentsAdapter;
 import com.djunicode.queuingapp.customClasses.RecyclerItemTouchHelper;
 import com.djunicode.queuingapp.customClasses.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener;
 import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.model.TeacherCreateNew;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class RecentsFragment extends Fragment implements
     RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
-
-  private RecyclerView recentsRecyclerView;
-  private RecentsAdapter adapter;
-  private RelativeLayout relativeLayout;
-
-  public RecentsFragment() {
+    final ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+    Bundle deletedStuff;
+    private RecyclerView recentsRecyclerView;
+    private RecentsAdapter adapter;
+    private RelativeLayout relativeLayout;
+    List<RecentEvents> recentEventsList = TeacherSubmissionFragment.recentEventsList;
+    public RecentsFragment() {
     // Required empty public constructor
   }
 
@@ -48,8 +58,7 @@ public class RecentsFragment extends Fragment implements
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_recents, container, false);
 
-    List<RecentEvents> recentEventsList = TeacherSubmissionFragment.recentEventsList;
-
+    deletedStuff = new Bundle();
     recentsRecyclerView = (RecyclerView) view.findViewById(R.id.recentsRecyclerView);
     recentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     adapter = new RecentsAdapter(getContext(), recentEventsList);
@@ -69,12 +78,32 @@ public class RecentsFragment extends Fragment implements
 
   @Override
   public void onSwiped(ViewHolder viewHolder, int direction, int position) {
+
     if(viewHolder instanceof RecentsAdapter.MyViewHolder){
       final RecentEvents event = TeacherSubmissionFragment.recentEventsList
           .get(viewHolder.getAdapterPosition());
 
+        deletedStuff.putString("subject",event.getSubjectName());
+        deletedStuff.putString("batch",event.getBatchName());
+        deletedStuff.putString("from",event.getStartTime());
+        deletedStuff.putString("to",event.getEndTime());
+        Call<RecentEvents> call = apiInterface.getQueueId(event.getSubjectName(),event.getBatchName(),event.getStartTime(),event.getEndTime());
+        call.enqueue(new Callback<RecentEvents>() {
+            @Override
+            public void onResponse(Call<RecentEvents> call, Response<RecentEvents> response) {
+                Log.d("Recent",Integer.toString(response.body().getId()));
+                 sendDatatoServer(response.body().getId());
+            }
+
+            @Override
+            public void onFailure(Call<RecentEvents> call, Throwable t) {
+
+            }
+        });
       final int deletedIndex = viewHolder.getAdapterPosition();
+
       adapter.removeItem(viewHolder.getAdapterPosition());
+
 
       Snackbar snackbar = Snackbar
           .make(relativeLayout, "Removed from recents!", Snackbar.LENGTH_LONG);
@@ -82,11 +111,38 @@ public class RecentsFragment extends Fragment implements
         @Override
         public void onClick(View view) {
           adapter.restoreItem(event, deletedIndex);
+          Call<TeacherCreateNew> call = apiInterface.sendSubmissionData(deletedStuff.getString("subject"),deletedStuff.getString("batch"),deletedStuff.getString("from"),deletedStuff.getString("to"));
+          call.enqueue(new Callback<TeacherCreateNew>() {
+              @Override
+              public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
+                    Log.d("addback","event added back!");
+              }
+
+              @Override
+              public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
+
+              }
+          });
         }
       });
       snackbar.setActionTextColor(Color.YELLOW);
       snackbar.show();
     }
+  }
+
+  public void sendDatatoServer(int id){
+      Call<RecentEvents> call = apiInterface.deleteRecentEvent(id);
+      call.enqueue(new Callback<RecentEvents>() {
+          @Override
+          public void onResponse(Call<RecentEvents> call, Response<RecentEvents> response) {
+            Log.d("Delete event","Event deleted from the list");
+          }
+
+          @Override
+          public void onFailure(Call<RecentEvents> call, Throwable t) {
+
+          }
+      });
   }
 }
 

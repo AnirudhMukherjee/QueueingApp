@@ -1,24 +1,32 @@
 package com.djunicode.queuingapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Ruturaj on 20-01-2018.
  */
 
 public class RecentEvents {
-
+  @SerializedName("subject")
   private String subjectName;
+  @SerializedName("batch")
   private String batchName;
+  @SerializedName("from")
   private String startTime;
+  @SerializedName("to")
   private String endTime;
+  @SerializedName("id")
+  int id;
   private String location;
 
   public RecentEvents(String subjectName, String batchName, String startTime, String endTime,
-      String location){
+      String location,int id){
     this.subjectName = subjectName;
     this.batchName = batchName;
     this.startTime = startTime;
     this.endTime = endTime;
     this.location = location;
+    this.id = id;
   }
 
   public void setSubjectName(String subjectName){
@@ -59,5 +67,10 @@ public class RecentEvents {
 
   public String getLocation() {
     return location;
+  }
+    public void setId(int id) { this.id = id;
+    }
+  public int getId() {
+    return id;
   }
 }
