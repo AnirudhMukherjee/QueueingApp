@@ -28,7 +28,14 @@ public class RecentEvents {
     this.location = location;
     this.id = id;
   }
-
+  public RecentEvents(String subjectName, String batchName, String startTime, String endTime,
+                      String location) {
+    this.subjectName = subjectName;
+    this.batchName = batchName;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.location = location;
+  }
   public void setSubjectName(String subjectName){
     this.subjectName = subjectName;
   }
