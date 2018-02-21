@@ -84,10 +84,10 @@ public class RecentsFragment extends Fragment implements
           .get(viewHolder.getAdapterPosition());
 
         deletedStuff.putString("subject",event.getSubjectName());
-        deletedStuff.putString("batch",event.getBatchName());
+        deletedStuff.putInt("size",event.getSize());
         deletedStuff.putString("from",event.getStartTime());
         deletedStuff.putString("to",event.getEndTime());
-        Call<RecentEvents> call = apiInterface.getQueueId(event.getSubjectName(),event.getBatchName(),event.getStartTime(),event.getEndTime());
+        Call<RecentEvents> call = apiInterface.getQueueId(event.getSubjectName(),event.getSize(),event.getStartTime(),event.getEndTime());
         call.enqueue(new Callback<RecentEvents>() {
             @Override
             public void onResponse(Call<RecentEvents> call, Response<RecentEvents> response) {
@@ -111,7 +111,7 @@ public class RecentsFragment extends Fragment implements
         @Override
         public void onClick(View view) {
           adapter.restoreItem(event, deletedIndex);
-          Call<TeacherCreateNew> call = apiInterface.sendSubmissionData(deletedStuff.getString("subject"),deletedStuff.getString("batch"),deletedStuff.getString("from"),deletedStuff.getString("to"));
+          Call<TeacherCreateNew> call = apiInterface.sendSubmissionData(deletedStuff.getString("subject"),deletedStuff.getInt("size"),deletedStuff.getString("from"),deletedStuff.getString("to"));
           call.enqueue(new Callback<TeacherCreateNew>() {
               @Override
               public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {

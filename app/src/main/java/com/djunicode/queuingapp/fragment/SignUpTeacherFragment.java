@@ -119,7 +119,8 @@ public class SignUpTeacherFragment extends Fragment {
 //
 //      }
 //    });
-  
+
+
   private Boolean validSubmission () {
 
     if (!validateUsername()) {

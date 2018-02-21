@@ -20,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.widget.CardView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,6 +71,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private Boolean isFabOpen, fromSelected, toSelected, studentsSelected;
   private String fromTime;
   private String toTime;
+  private int size;
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
 
 
@@ -231,6 +233,7 @@ public class TeacherSubmissionFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
               Toast.makeText(getContext(), input.getText().toString() + " students selected",
                   Toast.LENGTH_SHORT).show();
+              size = Integer.parseInt(input.getText().toString());
               toTime = input.getText().toString() + " students";
               studentsSelected = true;
             }
@@ -305,7 +308,8 @@ public class TeacherSubmissionFragment extends Fragment {
                   } else {
                     recentEventsList
                         .add(new RecentEvents(subjectSpinner.getSelectedItem().toString(),
-                            batchSpinner.getSelectedItem().toString(), fromTime, toTime,
+                            batchSpinner.getSelectedItem().toString(),
+                            size, fromTime, toTime,
                             TeacherLocationFragment.locationString));
                     Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
                   }
@@ -335,12 +339,14 @@ public class TeacherSubmissionFragment extends Fragment {
 
                 }
               });
+
             Call<TeacherCreateNew> call = apiService.sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
-                    batchSpinner.getSelectedItem().toString(),fromTime,toTime);
+                    size,fromTime,toTime);
              call.enqueue(new Callback<TeacherCreateNew>() {
+
                  @Override
                  public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
-                     Toast.makeText(getContext(), "Submission successful", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_LONG).show();
                  }
 
                  @Override

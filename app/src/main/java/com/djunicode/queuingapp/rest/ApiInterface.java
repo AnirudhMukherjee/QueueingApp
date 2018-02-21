@@ -56,12 +56,12 @@ public interface ApiInterface {
 //  Call<TeacherForId> getTeacherId (@Path("username") String username, @Path("password") String password);
 
   @FormUrlEncoded
-  @POST("queues/queue")
-  Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject, @Field("batch") String batch,
-                                            @Field("from") String from, @Field("to") String to);
+  @POST("queues/queue/")
+  Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject, @Field("size") int size,
+                                            @Field("startTime") String startTime, @Field("endTime") String endTime);
 
-  @GET("queues/queue")
-  Call<RecentEvents> getQueueId(@Path("subject") String subject, @Path("batch") String batch,
+  @GET("queues/queue/")
+  Call<RecentEvents> getQueueId(@Path("subject") String subject, @Path("size") int size,
                                 @Path("from") String from, @Path("to") String to);
 
   @DELETE("queues/queue/{id}/")

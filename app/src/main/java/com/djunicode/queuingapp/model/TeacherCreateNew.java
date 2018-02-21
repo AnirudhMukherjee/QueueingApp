@@ -10,17 +10,17 @@ public class TeacherCreateNew {
 
         @SerializedName("subject")
         public String subject;
-        @SerializedName("batch")
-        public String batch;
-        @SerializedName("from")
+        @SerializedName("size")
+        public int size;
+        @SerializedName("startTime")
         public String from;
-        @SerializedName("to")
+        @SerializedName("endTime")
         public String to;
 
 
-        public TeacherCreateNew(String subject, String batch, String from, String to) {
+        public TeacherCreateNew(String subject, int size, String from, String to) {
             this.subject = subject;
-            this.batch = batch;
+            this.size = size;
             this.from = from;
             this.to = to;
         }
@@ -29,8 +29,8 @@ public class TeacherCreateNew {
         return subject;
     }
 
-    public String getBatch() {
-        return batch;
+    public int getSize() {
+        return size;
     }
 
     public String getFrom() {

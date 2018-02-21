@@ -59,7 +59,7 @@ public class TeacherLocationFragment extends Fragment {
         "nine", "ten"};
 
     final Bundle extras = getArguments();
-
+    final Bundle deletedStuff = getArguments();
     floorSpinner = (Spinner) view.findViewById(R.id.floorSpinner);
     departmentSpinner = (Spinner) view.findViewById(R.id.departmentSpinner);
     roomSpinner = (Spinner) view.findViewById(R.id.roomSpinner);
@@ -137,7 +137,8 @@ public class TeacherLocationFragment extends Fragment {
           String batch = extras.getString("Batch");
           String from = extras.getString("From");
           String to = extras.getString("To");
-          TeacherSubmissionFragment.recentEventsList.add(new RecentEvents(subject, batch, from, to,
+          int size = deletedStuff.getInt("size");
+          TeacherSubmissionFragment.recentEventsList.add(new RecentEvents(subject, batch,size , from, to,
               locationString));
           Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
         }

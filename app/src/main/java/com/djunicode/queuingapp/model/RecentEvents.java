@@ -9,8 +9,8 @@ import com.google.gson.annotations.SerializedName;
 public class RecentEvents {
   @SerializedName("subject")
   private String subjectName;
-  @SerializedName("batch")
-  private String batchName;
+  @SerializedName("size")
+  private int size;
   @SerializedName("from")
   private String startTime;
   @SerializedName("to")
@@ -19,19 +19,23 @@ public class RecentEvents {
   int id;
   private String location;
 
-  public RecentEvents(String subjectName, String batchName, String startTime, String endTime,
+  private String batch;
+
+  public RecentEvents(String subjectName, String batch, int size, String startTime, String endTime,
       String location,int id){
     this.subjectName = subjectName;
-    this.batchName = batchName;
+    this.batch = batch;
+    this.size = size;
     this.startTime = startTime;
     this.endTime = endTime;
     this.location = location;
     this.id = id;
   }
-  public RecentEvents(String subjectName, String batchName, String startTime, String endTime,
+  public RecentEvents(String subjectName, String batch, int size, String startTime, String endTime,
                       String location) {
     this.subjectName = subjectName;
-    this.batchName = batchName;
+    this.batch = batch;
+    this.size = size;
     this.startTime = startTime;
     this.endTime = endTime;
     this.location = location;
@@ -44,12 +48,12 @@ public class RecentEvents {
     return subjectName;
   }
 
-  public void setBatchName(String batchName) {
-    this.batchName = batchName;
+  public void setSize(int size) {
+    this.size = size;
   }
 
-  public String getBatchName() {
-    return batchName;
+  public int getSize() {
+    return size;
   }
 
   public void setStartTime(String startTime) {
@@ -79,5 +83,13 @@ public class RecentEvents {
     }
   public int getId() {
     return id;
+  }
+
+  public String getBatchName() {
+    return batch;
+  }
+
+  public void setBatchName(String batch) {
+    this.batch = batch;
   }
 }
