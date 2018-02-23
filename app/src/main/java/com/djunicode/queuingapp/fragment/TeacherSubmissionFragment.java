@@ -70,7 +70,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private Animation fabOpen, fabClose, rotateForward, rotateBackward;
   private Boolean isFabOpen, fromSelected, toSelected, studentsSelected;
   private String fromTime;
-  private String toTime,noOfStudents;
+  private String toTime="00:00",noOfStudents;
   private int size;
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
 
@@ -406,25 +406,26 @@ public class TeacherSubmissionFragment extends Fragment {
           Log.i("APIError", fromTime);
           Log.i("APIError", toTime);
 
-            Call<TeacherCreateNew> call = apiService.sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
-                    size,fromTime+":00",toTime+":00","");
-             call.enqueue(new Callback<TeacherCreateNew>() {
+                Call<TeacherCreateNew> call = apiService.sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
+                        size, fromTime + ":00", toTime + ":00", "");
+                call.enqueue(new Callback<TeacherCreateNew>() {
 
-                 @Override
-                 public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
-                     //Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_LONG).show();
-                     Log.i("Hello", "hello");
-                   if (response.isSuccessful())
-                     Log.d("Response succ", response.body().toString());
-                   else
-                     Log.d("Response succ", response.errorBody().toString());
-                 }
+                    @Override
+                    public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
+                        //Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_LONG).show();
+                        Log.i("Hello", "hello");
+                        if (response.isSuccessful())
+                            Log.d("Response succ", response.body().toString());
+                        else
+                            Log.d("Response succ", response.errorBody().toString());
+                    }
 
-                 @Override
-                 public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
-                     Toast.makeText(getContext(), "Submission failed", Toast.LENGTH_SHORT).show();
-                 }
-             });
+                    @Override
+                    public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
+                        Toast.makeText(getContext(), "Submission failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
           builder.show();
         } else {
           Toast.makeText(getContext(), "Please select all fields.", Toast.LENGTH_SHORT).show();
