@@ -70,7 +70,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private Animation fabOpen, fabClose, rotateForward, rotateBackward;
   private Boolean isFabOpen, fromSelected, toSelected, studentsSelected;
   private String fromTime;
-  private String toTime;
+  private String toTime,noOfStudents;
   private int size;
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
 
@@ -142,28 +142,60 @@ public class TeacherSubmissionFragment extends Fragment {
       public void onClick(View v) {
         if (batchSpinner.getSelectedItemPosition() != 0) {
           TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
-              new OnTimeSetListener() {
+
+                  new OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    String hour, min;
                   if (hourOfDay <= 11 && minute <= 59) {
                     Snackbar.make(coordinatorLayout,
                         "Submission is from " + hourOfDay + ":" + minute + "am",
                         Snackbar.LENGTH_LONG).show();
-                    fromTime = Integer.toString(hourOfDay) + ":" + Integer.toString(minute) + "am";
+                    if(hourOfDay<10){
+                        hour = "0"+Integer.toString(hourOfDay);
+                    }
+                    else
+                        hour = Integer.toString(hourOfDay);
+                    if(minute<10){
+                        min = "0"+Integer.toString(minute);
+                    }
+                    else
+                        min = Integer.toString(minute);
+                    fromTime = hour + ":" + min;
                   } else {
                     if (hourOfDay == 12 && minute == 0) {
+                        if(hourOfDay<10){
+                            hour = "0"+Integer.toString(hourOfDay);
+                        }
+                        else
+                            hour = Integer.toString(hourOfDay);
+                        if(minute<10){
+                            min = "0"+Integer.toString(minute);
+                        }
+                        else
+                            min = Integer.toString(minute);
                       Snackbar.make(coordinatorLayout,
                           "Submission is from " + hourOfDay + ":" + minute + "pm",
                           Snackbar.LENGTH_LONG).show();
                       fromTime =
-                          Integer.toString(hourOfDay) + ":" + Integer.toString(minute) + "pm";
+                          hour + ":" + minute;
                     } else {
                       hourOfDay -= 12;
+                        if(hourOfDay<10){
+                            hour = "0"+Integer.toString(hourOfDay);
+                        }
+                        else
+                            hour = Integer.toString(hourOfDay);
+                        if(minute<10){
+                            min = "0"+Integer.toString(minute);
+                        }
+                        else
+                            min = Integer.toString(minute);
                       Snackbar.make(coordinatorLayout,
                           "Submission is from " + hourOfDay + ":" + minute + "pm",
                           Snackbar.LENGTH_LONG).show();
                       fromTime =
-                          Integer.toString(hourOfDay) + ":" + Integer.toString(minute) + "pm";
+                          hour + ":" + min;
                     }
                   }
                   fromSelected = true;
@@ -185,23 +217,54 @@ public class TeacherSubmissionFragment extends Fragment {
               new OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    String hour,min;
                   if (hourOfDay <= 11 && minute <= 59) {
+                      if(hourOfDay<10){
+                          hour = "0"+Integer.toString(hourOfDay);
+                      }
+                      else
+                          hour = Integer.toString(hourOfDay);
+                      if(minute<10){
+                          min = "0"+Integer.toString(minute);
+                      }
+                      else
+                          min = Integer.toString(minute);
                     Snackbar.make(coordinatorLayout,
                         "Submission is till " + hourOfDay + ":" + minute + "am",
                         Snackbar.LENGTH_LONG).show();
-                    toTime = Integer.toString(hourOfDay) + ":" + Integer.toString(minute) + "am";
+                    toTime = hour + ":" + min;
                   } else {
                     if (hourOfDay == 12 && minute == 0) {
+                        if(hourOfDay<10){
+                            hour = "0"+Integer.toString(hourOfDay);
+                        }
+                        else
+                            hour = Integer.toString(hourOfDay);
+                        if(minute<10){
+                            min = "0"+Integer.toString(minute);
+                        }
+                        else
+                            min = Integer.toString(minute);
                       Snackbar.make(coordinatorLayout,
                           "Submission is till " + hourOfDay + ":" + minute + "pm",
                           Snackbar.LENGTH_LONG).show();
-                      toTime = Integer.toString(hourOfDay) + ":" + Integer.toString(minute) + "pm";
+                      toTime = hour + ":" + min;
                     } else {
                       hourOfDay -= 12;
+                        if(hourOfDay<10){
+                            hour = "0"+Integer.toString(hourOfDay);
+                        }
+                        else
+                            hour = Integer.toString(hourOfDay);
+                        if(minute<10){
+                            min = "0"+Integer.toString(minute);
+                        }
+                        else
+                            min = Integer.toString(minute);
                       Snackbar.make(coordinatorLayout,
                           "Submission is till " + hourOfDay + ":" + minute + "pm",
                           Snackbar.LENGTH_LONG).show();
-                      toTime = Integer.toString(hourOfDay) + ":" + Integer.toString(minute) + "pm";
+                      toTime = hour + ":" + min;
                     }
                   }
                   toSelected = true;
@@ -234,7 +297,7 @@ public class TeacherSubmissionFragment extends Fragment {
               Toast.makeText(getContext(), input.getText().toString() + " students selected",
                   Toast.LENGTH_SHORT).show();
               size = Integer.parseInt(input.getText().toString());
-              toTime = input.getText().toString() + " students";
+              noOfStudents = input.getText().toString() + " students";
               studentsSelected = true;
             }
           });
@@ -289,7 +352,7 @@ public class TeacherSubmissionFragment extends Fragment {
                     extras.putString("Subject", subjectSpinner.getSelectedItem().toString());
                     extras.putString("Batch", batchSpinner.getSelectedItem().toString());
                     extras.putString("From", fromTime);
-                    extras.putString("To", toTime);
+                    extras.putString("To", noOfStudents);
 
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager()
                         .beginTransaction();
@@ -340,13 +403,21 @@ public class TeacherSubmissionFragment extends Fragment {
                 }
               });
 
+          Log.i("APIError", fromTime);
+          Log.i("APIError", toTime);
+
             Call<TeacherCreateNew> call = apiService.sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
-                    size,fromTime,toTime);
+                    size,fromTime+":00",toTime+":00","");
              call.enqueue(new Callback<TeacherCreateNew>() {
 
                  @Override
                  public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
-                     Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_LONG).show();
+                     //Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_LONG).show();
+                     Log.i("Hello", "hello");
+                   if (response.isSuccessful())
+                     Log.d("Response succ", response.body().toString());
+                   else
+                     Log.d("Response succ", response.errorBody().toString());
                  }
 
                  @Override

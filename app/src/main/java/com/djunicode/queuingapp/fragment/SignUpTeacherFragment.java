@@ -52,7 +52,7 @@ public class SignUpTeacherFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_sign_up_teacher, container, false);
 
     teacherSignUpinputLayoutUsername = (TextInputLayout) view.findViewById(R.id.signUp_teacher_username);

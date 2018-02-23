@@ -58,7 +58,7 @@ public interface ApiInterface {
   @FormUrlEncoded
   @POST("queues/queue/")
   Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject, @Field("size") int size,
-                                            @Field("startTime") String startTime, @Field("endTime") String endTime);
+                                            @Field("startTime") String startTime, @Field("endTime") String endTime,@Field("queueItems") String queueItems);
 
   @GET("queues/queue/")
   Call<RecentEvents> getQueueId(@Path("subject") String subject, @Path("size") int size,

@@ -16,13 +16,16 @@ public class TeacherCreateNew {
         public String from;
         @SerializedName("endTime")
         public String to;
+        @SerializedName("queueItems")
+        public String queueItems;
 
 
-        public TeacherCreateNew(String subject, int size, String from, String to) {
+        public TeacherCreateNew(String subject, int size, String from, String to,String queueItems) {
             this.subject = subject;
             this.size = size;
             this.from = from;
             this.to = to;
+            this.queueItems = queueItems;
         }
 
     public String getSubject() {
@@ -39,5 +42,8 @@ public class TeacherCreateNew {
 
     public String getTo() {
         return to;
+    }
+
+    public String getQueueItems(){ return queueItems;
     }
 }

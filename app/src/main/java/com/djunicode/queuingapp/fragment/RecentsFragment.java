@@ -111,7 +111,7 @@ public class RecentsFragment extends Fragment implements
         @Override
         public void onClick(View view) {
           adapter.restoreItem(event, deletedIndex);
-          Call<TeacherCreateNew> call = apiInterface.sendSubmissionData(deletedStuff.getString("subject"),deletedStuff.getInt("size"),deletedStuff.getString("from"),deletedStuff.getString("to"));
+          Call<TeacherCreateNew> call = apiInterface.sendSubmissionData(deletedStuff.getString("subject"),deletedStuff.getInt("size"),deletedStuff.getString("from")+":00",deletedStuff.getString("to")+":00","");
           call.enqueue(new Callback<TeacherCreateNew>() {
               @Override
               public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
