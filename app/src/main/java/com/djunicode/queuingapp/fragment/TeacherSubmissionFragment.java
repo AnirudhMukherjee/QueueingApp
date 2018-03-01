@@ -413,6 +413,10 @@ public class TeacherSubmissionFragment extends Fragment {
                     @Override
                     public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
                         //Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_LONG).show();
+                        Bundle ids = new Bundle();
+                        ids.putString("ids",Integer.toString(response.body().getId()));
+                        RecentsFragment.eventIds.add(response.body().getId());
+                        recentEventsList.add(new RecentEvents(subjectSpinner.getSelectedItem().toString(),size,fromTime,toTime,response.body().getId(),TeacherLocationFragment.locationString));
                         Log.i("Hello", "hello");
                         if (response.isSuccessful())
                             Log.d("Response succ", response.body().toString());

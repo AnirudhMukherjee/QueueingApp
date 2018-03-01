@@ -30,6 +30,7 @@ import com.djunicode.queuingapp.model.TeacherCreateNew;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -47,6 +48,8 @@ public class RecentsFragment extends Fragment implements
     private RecentsAdapter adapter;
     private RelativeLayout relativeLayout;
     List<RecentEvents> recentEventsList = TeacherSubmissionFragment.recentEventsList;
+    public static List<Integer> eventIds = new ArrayList<>();
+
     public RecentsFragment() {
     // Required empty public constructor
   }
@@ -77,7 +80,7 @@ public class RecentsFragment extends Fragment implements
   }
 
   @Override
-  public void onSwiped(ViewHolder viewHolder, int direction, int position) {
+  public void onSwiped(ViewHolder viewHolder, int direction, final int position) {
 
     if(viewHolder instanceof RecentsAdapter.MyViewHolder){
       final RecentEvents event = TeacherSubmissionFragment.recentEventsList
@@ -87,12 +90,26 @@ public class RecentsFragment extends Fragment implements
         deletedStuff.putInt("size",event.getSize());
         deletedStuff.putString("from",event.getStartTime());
         deletedStuff.putString("to",event.getEndTime());
-        Call<RecentEvents> call = apiInterface.getQueueId(event.getSubjectName(),event.getSize(),event.getStartTime(),event.getEndTime());
+        deletedStuff.putInt("ids",eventIds.get(position));
+//        Call<RecentEvents> call = apiInterface.getQueueId(event.getId());
+//        call.enqueue(new Callback<RecentEvents>() {
+//            @Override
+//            public void onResponse(Call<RecentEvents> call, Response<RecentEvents> response) {
+//                Log.d("Recent",Integer.toString(response.body().getId()));
+//                 sendDatatoServer(response.body().getId());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<RecentEvents> call, Throwable t) {
+//
+//            }
+//        });
+        Call<RecentEvents> call = apiInterface.deleteRecentEvent(eventIds.get(position));
         call.enqueue(new Callback<RecentEvents>() {
             @Override
             public void onResponse(Call<RecentEvents> call, Response<RecentEvents> response) {
-                Log.d("Recent",Integer.toString(response.body().getId()));
-                 sendDatatoServer(response.body().getId());
+                Log.d("Delete event","Event deleted from the list");
+                Log.d("Idno",Integer.toString(eventIds.get(position)));
             }
 
             @Override
@@ -127,23 +144,24 @@ public class RecentsFragment extends Fragment implements
       });
       snackbar.setActionTextColor(Color.YELLOW);
       snackbar.show();
+      eventIds.remove(position);
     }
   }
 
-  public void sendDatatoServer(int id){
-      Call<RecentEvents> call = apiInterface.deleteRecentEvent(id);
-      call.enqueue(new Callback<RecentEvents>() {
-          @Override
-          public void onResponse(Call<RecentEvents> call, Response<RecentEvents> response) {
-            Log.d("Delete event","Event deleted from the list");
-          }
-
-          @Override
-          public void onFailure(Call<RecentEvents> call, Throwable t) {
-
-          }
-      });
-  }
+//  public void sendDatatoServer(int id){
+//      Call<RecentEvents> call = apiInterface.deleteRecentEvent(id);
+//      call.enqueue(new Callback<RecentEvents>() {
+//          @Override
+//          public void onResponse(Call<RecentEvents> call, Response<RecentEvents> response) {
+//            Log.d("Delete event","Event deleted from the list");
+//          }
+//
+//          @Override
+//          public void onFailure(Call<RecentEvents> call, Throwable t) {
+//
+//          }
+//      });
+//  }
 }
 
 

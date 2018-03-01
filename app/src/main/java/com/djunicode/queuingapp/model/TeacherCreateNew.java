@@ -18,15 +18,22 @@ public class TeacherCreateNew {
         public String to;
         @SerializedName("queueItems")
         public String queueItems;
+        @SerializedName("id")
+        public int id;
 
 
-        public TeacherCreateNew(String subject, int size, String from, String to,String queueItems) {
+        public TeacherCreateNew(int id, String subject, int size, String from, String to,String queueItems) {
             this.subject = subject;
             this.size = size;
             this.from = from;
             this.to = to;
             this.queueItems = queueItems;
+            this.id = id;
         }
+
+    public int getId() {
+        return id;
+    }
 
     public String getSubject() {
         return subject;

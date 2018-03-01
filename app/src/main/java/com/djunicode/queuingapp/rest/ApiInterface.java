@@ -48,24 +48,28 @@ public interface ApiInterface {
 
   @FormUrlEncoded
   @POST("queues/teacher/")
-  Call<Teacher> createTeacherAccount(@Field("user") int user_id, @Field("name") String username, @Field("password") String password,
-                                     @Field("sapID") String sapId, @Field("department") String department);
+  Call<Teacher> createTeacherAccount(@Field("user") int user_id, @Field("name") String username,
+                                     @Field("sapId") String sapId, @Field("subject")String subject ,
+                                     @Field("password") String password,
+                                     @Field("location") int location);
 
-//  @FormUrlEncoded
-//  @POST("queues/teacher/") //Check
-//  Call<TeacherForId> getTeacherId (@Path("username") String username, @Path("password") String password);
+  @FormUrlEncoded
+  @POST("queues/users/") //Check
+  Call<TeacherForId> getTeacherId (@Field("username") String username, @Field("password") String password,@Field("email")String email);
 
   @FormUrlEncoded
   @POST("queues/queue/")
   Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject, @Field("size") int size,
                                             @Field("startTime") String startTime, @Field("endTime") String endTime,@Field("queueItems") String queueItems);
 
-  @GET("queues/queue/")
-  Call<RecentEvents> getQueueId(@Path("subject") String subject, @Path("size") int size,
-                                @Path("from") String from, @Path("to") String to);
+//  @GET("queues/queue/")
+//  Call<RecentEvents> getQueueId(@Path("id") int id);
 
   @DELETE("queues/queue/{id}/")
   Call<RecentEvents> deleteRecentEvent(@Path("id") int id);
+
+  @PUT("queues/teacher/login/")
+    Call<Teacher> getValidId(@Field("name") String username, @Field("password") String password);
 
 
 

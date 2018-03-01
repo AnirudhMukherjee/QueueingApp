@@ -18,6 +18,13 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
+import com.djunicode.queuingapp.model.Teacher;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +37,9 @@ public class LogInTeacherFragment extends Fragment {
   // Session Manager Class
   SessionManager session;
   SharedPreferences spDemo;
+  public Boolean trueLogin;
+  final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
   public LogInTeacherFragment() {
     // Required empty public constructor
   }
@@ -55,7 +65,7 @@ public class LogInTeacherFragment extends Fragment {
     logInTeacherButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if(validTeacherLogIn()) {
+        if(validTeacherLogIn() && trueLogin) {
           session.createLoginSession(sapIdLogInTeacherEditText.getText().toString(),
               passwordLogInTeacherEditText.getText().toString());
           Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
@@ -137,5 +147,27 @@ public class LogInTeacherFragment extends Fragment {
     if(view.requestFocus()){
       getActivity().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
+  }
+
+  private void validLogin(){
+    Call<Teacher> call = apiService.getValidId(sapIdLogInTeacherEditText.getText().toString(),passwordLogInTeacherEditText.getText().toString());
+    call.enqueue(new Callback<Teacher>() {
+        @Override
+        public void onResponse(Call<Teacher> call, Response<Teacher> response) {
+            if(response.isSuccessful()){
+                if(Boolean.parseBoolean(response.body().toString())){
+                    trueLogin = true;
+                }
+                else
+                    trueLogin = false;
+            }
+        }
+
+        @Override
+        public void onFailure(Call<Teacher> call, Throwable t) {
+
+        }
+    });
+
   }
 }

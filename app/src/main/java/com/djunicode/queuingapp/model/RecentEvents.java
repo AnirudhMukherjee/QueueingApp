@@ -21,10 +21,9 @@ public class RecentEvents {
 
   private String batch;
 
-  public RecentEvents(String subjectName, String batch, int size, String startTime, String endTime,
-      String location,int id){
+  public RecentEvents(String subjectName, int size, String startTime, String endTime,
+          int id, String location){
     this.subjectName = subjectName;
-    this.batch = batch;
     this.size = size;
     this.startTime = startTime;
     this.endTime = endTime;

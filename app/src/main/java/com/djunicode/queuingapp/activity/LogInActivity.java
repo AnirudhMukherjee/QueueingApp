@@ -213,6 +213,7 @@ public class LogInActivity extends AppCompatActivity {
           SAPId = sapIDEditText.getText().toString();
           password = passwordEditText.getText().toString();
           hash_password(password); //Hash the password before sending it to the server
+          username = username + " " + salt;
           getIdForStudentFromUser();
           session.createLoginSession(usernameEditText.getText().toString(),
               passwordEditText.getText().toString());
