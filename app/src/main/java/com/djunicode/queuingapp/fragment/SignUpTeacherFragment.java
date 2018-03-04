@@ -120,12 +120,12 @@ public class SignUpTeacherFragment extends Fragment {
   }
 
     private void sendTeacherDataToServer(int id) {
-        Call<Teacher> call = apiService.createTeacherAccount(id, username,sapIDTeacherEditText.getText().toString(),"AOA");
+        Call<Teacher> call = apiService.createTeacherAccount(id, username,sapIDTeacherEditText.getText().toString(),"AOA",46);
         call.enqueue(new Callback<Teacher>() {
             @Override
             public void onResponse(Call<Teacher> call, Response<Teacher> response) {
                 //Check here for valid response
-                if(response.isSuccessful())
+//                if(response.isSuccessful())
                 Log.d("Teacher",response.body().toString());
             }
 
@@ -135,6 +135,7 @@ public class SignUpTeacherFragment extends Fragment {
             }
         });
     }
+
 
   private Boolean validSubmission () {
 

@@ -73,7 +73,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private String toTime="00:00",noOfStudents;
   private int size;
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
-
+  final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
   public TeacherSubmissionFragment() {
     // Required empty public constructor
@@ -88,7 +88,7 @@ public class TeacherSubmissionFragment extends Fragment {
 
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
-    final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
 
     isFabOpen = false;
     fromSelected = false;
@@ -148,9 +148,7 @@ public class TeacherSubmissionFragment extends Fragment {
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     String hour, min;
                   if (hourOfDay <= 11 && minute <= 59) {
-                    Snackbar.make(coordinatorLayout,
-                        "Submission is from " + hourOfDay + ":" + minute + "am",
-                        Snackbar.LENGTH_LONG).show();
+
                     if(hourOfDay<10){
                         hour = "0"+Integer.toString(hourOfDay);
                     }
@@ -162,6 +160,9 @@ public class TeacherSubmissionFragment extends Fragment {
                     else
                         min = Integer.toString(minute);
                     fromTime = hour + ":" + min;
+                      Snackbar.make(coordinatorLayout,
+                              "Submission is from " + fromTime + "am",
+                              Snackbar.LENGTH_LONG).show();
                   } else {
                     if (hourOfDay == 12 && minute == 0) {
                         if(hourOfDay<10){
@@ -174,11 +175,11 @@ public class TeacherSubmissionFragment extends Fragment {
                         }
                         else
                             min = Integer.toString(minute);
+                        fromTime = hour + ":" + minute;
                       Snackbar.make(coordinatorLayout,
-                          "Submission is from " + hourOfDay + ":" + minute + "pm",
+                          "Submission is from " + fromTime + "pm",
                           Snackbar.LENGTH_LONG).show();
-                      fromTime =
-                          hour + ":" + minute;
+
                     } else {
                       hourOfDay -= 12;
                         if(hourOfDay<10){
@@ -191,11 +192,11 @@ public class TeacherSubmissionFragment extends Fragment {
                         }
                         else
                             min = Integer.toString(minute);
+                        fromTime = hour + ":" + min;
                       Snackbar.make(coordinatorLayout,
-                          "Submission is from " + hourOfDay + ":" + minute + "pm",
+                          "Submission is from " + fromTime + "pm",
                           Snackbar.LENGTH_LONG).show();
-                      fromTime =
-                          hour + ":" + min;
+
                     }
                   }
                   fromSelected = true;
@@ -229,10 +230,11 @@ public class TeacherSubmissionFragment extends Fragment {
                       }
                       else
                           min = Integer.toString(minute);
+                      toTime = hour + ":" + min;
                     Snackbar.make(coordinatorLayout,
-                        "Submission is till " + hourOfDay + ":" + minute + "am",
+                        "Submission is till " + toTime + "am",
                         Snackbar.LENGTH_LONG).show();
-                    toTime = hour + ":" + min;
+
                   } else {
                     if (hourOfDay == 12 && minute == 0) {
                         if(hourOfDay<10){
@@ -245,10 +247,11 @@ public class TeacherSubmissionFragment extends Fragment {
                         }
                         else
                             min = Integer.toString(minute);
+                        toTime = hour + ":" + min;
                       Snackbar.make(coordinatorLayout,
-                          "Submission is till " + hourOfDay + ":" + minute + "pm",
+                          "Submission is till " + toTime + "pm",
                           Snackbar.LENGTH_LONG).show();
-                      toTime = hour + ":" + min;
+
                     } else {
                       hourOfDay -= 12;
                         if(hourOfDay<10){
@@ -261,10 +264,11 @@ public class TeacherSubmissionFragment extends Fragment {
                         }
                         else
                             min = Integer.toString(minute);
+                        toTime = hour + ":" + min;
                       Snackbar.make(coordinatorLayout,
                           "Submission is till " + hourOfDay + ":" + minute + "pm",
                           Snackbar.LENGTH_LONG).show();
-                      toTime = hour + ":" + min;
+
                     }
                   }
                   toSelected = true;
@@ -422,6 +426,7 @@ public class TeacherSubmissionFragment extends Fragment {
                             Log.d("Response succ", response.body().toString());
                         else
                             Log.d("Response succ", response.errorBody().toString());
+                        sendNotificationToStudents(response.body().getId());
                     }
 
                     @Override
@@ -441,6 +446,21 @@ public class TeacherSubmissionFragment extends Fragment {
     return view;
   }
 
+  private void sendNotificationToStudents(int id){
+      Call<TeacherCreateNew> call = apiService.sendStudNotification(id,"sheku");
+      call.enqueue(new Callback<TeacherCreateNew>() {
+          @Override
+          public void onResponse(Call<TeacherCreateNew> call, Response<TeacherCreateNew> response) {
+
+          }
+
+          @Override
+          public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
+
+          }
+      });
+
+  }
   private void animateFab() {
     if (isFabOpen) {
       fabLL1.setVisibility(View.INVISIBLE);

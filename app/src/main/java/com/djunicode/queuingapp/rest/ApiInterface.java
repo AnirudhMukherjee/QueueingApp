@@ -49,7 +49,7 @@ public interface ApiInterface {
   @FormUrlEncoded
   @POST("queues/teacher/")
   Call<Teacher> createTeacherAccount(@Field("user") int user_id, @Field("name") String username,
-                                     @Field("sapId") String sapId, @Field("subject")String subject);
+                                     @Field("sapId") String sapId, @Field("subject")String subject, @Field("location") int location);
 
   @FormUrlEncoded
   @POST("queues/users/") //Check
@@ -72,7 +72,9 @@ public interface ApiInterface {
   @PUT("queues/student/login/")
   Call<Student> getValidIdStudent(@Field("sapID") String sapID, @Field("password") String password);
 
-
+  @FormUrlEncoded
+  @POST("queues/queue/{id}/notification/") //Check
+  Call<TeacherCreateNew> sendStudNotification (@Path("id") int id, @Field("teacherName") String teacherName);
 
 
 }

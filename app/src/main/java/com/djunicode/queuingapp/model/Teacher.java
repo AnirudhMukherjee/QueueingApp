@@ -18,18 +18,18 @@ public class Teacher {
     public String sapID;
     @SerializedName("subject")
     public String subject;
-//    @SerializedName("location")
-//    public int location;
+    @SerializedName("location")
+    public int location;
     @SerializedName("password")
     public String password;
 
-    public Teacher(int user, String name,String password, String department, String sapID, String subject){
+    public Teacher(int user, String name,String password, String department, String sapID, String subject, int location){
         this.user = user;
         //this.department = department;
         this .name = name;
         this.sapID = sapID;
         this.subject = subject;
-//        this.location = location;
+        this.location = location;
         this.password = password;
     }
 }
