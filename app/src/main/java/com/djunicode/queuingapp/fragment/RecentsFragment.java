@@ -42,8 +42,10 @@ import retrofit2.Response;
  */
 public class RecentsFragment extends Fragment implements
     RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+
     final ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
     Bundle deletedStuff;
+
     private RecyclerView recentsRecyclerView;
     private RecentsAdapter adapter;
     private RelativeLayout relativeLayout;
@@ -75,7 +77,7 @@ public class RecentsFragment extends Fragment implements
     ItemTouchHelper.SimpleCallback simpleCallback = new RecyclerItemTouchHelper(0,
         ItemTouchHelper.LEFT, this);
     new ItemTouchHelper(simpleCallback).attachToRecyclerView(recentsRecyclerView);
-
+    Log.d("aaa", eventIds.get(0).toString());
     return view;
   }
 
@@ -108,8 +110,8 @@ public class RecentsFragment extends Fragment implements
         call.enqueue(new Callback<RecentEvents>() {
             @Override
             public void onResponse(Call<RecentEvents> call, Response<RecentEvents> response) {
-                Log.d("Delete event","Event deleted from the list");
-                Log.d("Idno",Integer.toString(eventIds.get(position)));
+//                Log.d("Delete event","Event deleted from the list");
+//                Log.d("Idno",Integer.toString(eventIds.get(position)));
             }
 
             @Override

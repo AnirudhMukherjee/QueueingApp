@@ -26,6 +26,8 @@ import com.djunicode.queuingapp.model.TeacherForId;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
 
+import java.util.Random;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,7 +46,8 @@ public class SignUpTeacherFragment extends Fragment {
   private String salt, intermediate_password, hashed_password;
   SessionManager session;
   final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-
+  private Random random;
+  private int location;
   public SignUpTeacherFragment() {
     // Required empty public constructor
   }
@@ -64,6 +67,8 @@ public class SignUpTeacherFragment extends Fragment {
     sapIDTeacherEditText = (EditText) view.findViewById(R.id.sapIDTeacherEditText);
     departmentTeacherSpinner = (Spinner) view.findViewById(R.id.departmentTeacherSpinner);
     signUpTeacherButton = (CardView) view.findViewById(R.id.signUpTeacherButton);
+    random = new Random();
+    location = random.nextInt(65535);
 
     // Session Manager
     session = new SessionManager(getContext(), "Teacher");
@@ -115,11 +120,12 @@ public class SignUpTeacherFragment extends Fragment {
   }
 
     private void sendTeacherDataToServer(int id) {
-        Call<Teacher> call = apiService.createTeacherAccount(id, username,sapIDTeacherEditText.getText().toString(),"AOA",41);
+        Call<Teacher> call = apiService.createTeacherAccount(id, username,sapIDTeacherEditText.getText().toString(),"AOA");
         call.enqueue(new Callback<Teacher>() {
             @Override
             public void onResponse(Call<Teacher> call, Response<Teacher> response) {
                 //Check here for valid response
+                if(response.isSuccessful())
                 Log.d("Teacher",response.body().toString());
             }
 
