@@ -21,18 +21,18 @@ public class Student {
   public String batch;
   @SerializedName("sapID")
   public String sapID;
-//  @SerializedName("password")
-//  public String password;
+  @SerializedName("password")
+  public String password;
 
-  public Student(int user, String name, String department, String year, String batch,
-      String sapID, String password)   {
+  public Student(int user, String name, String password, String department, String year, String batch,
+      String sapID)   {
     this.user = user;
     this.name = name;
     this.department = department;
     this.year = year;
     this.batch = batch;
     this.sapID = sapID;
-//    this.password = password;
+    this.password = password;
   }
 
 }

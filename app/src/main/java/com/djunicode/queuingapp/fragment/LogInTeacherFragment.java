@@ -91,9 +91,10 @@ public class LogInTeacherFragment extends Fragment {
       return false;
     }
 
-    if(!validMatch()){
-      return false;
-    }
+//    if(!validMatch()){
+//      return false;
+//    }
+    validMatch();
     return true;
   }
 
@@ -129,18 +130,18 @@ public class LogInTeacherFragment extends Fragment {
     return true;
   }
 
-  private boolean validMatch() {
-    if(sapIdLogInTeacherEditText.getText().toString().equals("dhruv") &&
-        passwordLogInTeacherEditText.getText().toString().equals("demopass")) {
-
-      return true;
-    }
-    else {
-      Toast.makeText(getContext(), "Doesn't match!",
-          Toast.LENGTH_SHORT).show();
-      return false;
-    }
-  }
+//  private boolean validMatch() {
+//    if(sapIdLogInTeacherEditText.getText().toString().equals("dhruv") &&
+//        passwordLogInTeacherEditText.getText().toString().equals("demopass")) {
+//
+//      return true;
+//    }
+//    else {
+//      Toast.makeText(getContext(), "Doesn't match!",
+//          Toast.LENGTH_SHORT).show();
+//      return false;
+//    }
+//  }
 
   private void requestFocus (View view) {
 
@@ -149,7 +150,7 @@ public class LogInTeacherFragment extends Fragment {
     }
   }
 
-  private void validLogin(){
+  private void validMatch(){
     Call<Teacher> call = apiService.getValidId(sapIdLogInTeacherEditText.getText().toString(),passwordLogInTeacherEditText.getText().toString());
     call.enqueue(new Callback<Teacher>() {
         @Override
@@ -165,6 +166,7 @@ public class LogInTeacherFragment extends Fragment {
 
         @Override
         public void onFailure(Call<Teacher> call, Throwable t) {
+
 
         }
     });

@@ -50,7 +50,6 @@ public interface ApiInterface {
   @POST("queues/teacher/")
   Call<Teacher> createTeacherAccount(@Field("user") int user_id, @Field("name") String username,
                                      @Field("sapId") String sapId, @Field("subject")String subject ,
-                                     @Field("password") String password,
                                      @Field("location") int location);
 
   @FormUrlEncoded
@@ -59,7 +58,7 @@ public interface ApiInterface {
 
   @FormUrlEncoded
   @POST("queues/queue/")
-  Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject, @Field("size") int size,
+  Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject, @Field("maxLength") int size,@Field("teacherName") String teacherName,
                                             @Field("startTime") String startTime, @Field("endTime") String endTime,@Field("queueItems") String queueItems);
 
 //  @GET("queues/queue/")
@@ -70,6 +69,9 @@ public interface ApiInterface {
 
   @PUT("queues/teacher/login/")
     Call<Teacher> getValidId(@Field("name") String username, @Field("password") String password);
+
+  @PUT("queues/student/login/")
+  Call<Student> getValidIdStudent(@Field("name") String username, @Field("password") String password);
 
 
 

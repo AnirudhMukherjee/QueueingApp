@@ -407,7 +407,7 @@ public class TeacherSubmissionFragment extends Fragment {
           Log.i("APIError", toTime);
 
                 Call<TeacherCreateNew> call = apiService.sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
-                        size, fromTime + ":00", toTime + ":00", "");
+                        size, "Sheku",fromTime + ":00", toTime + ":00", "");
                 call.enqueue(new Callback<TeacherCreateNew>() {
 
                     @Override

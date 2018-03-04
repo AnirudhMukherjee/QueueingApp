@@ -10,7 +10,7 @@ public class TeacherCreateNew {
 
         @SerializedName("subject")
         public String subject;
-        @SerializedName("size")
+        @SerializedName("maxLength")
         public int size;
         @SerializedName("startTime")
         public String from;
@@ -20,16 +20,23 @@ public class TeacherCreateNew {
         public String queueItems;
         @SerializedName("id")
         public int id;
+        @SerializedName("teacherName")
+        public String teacherName;
 
 
-        public TeacherCreateNew(int id, String subject, int size, String from, String to,String queueItems) {
+        public TeacherCreateNew(int id, String subject, int size, String teacherName, String from, String to,String queueItems) {
             this.subject = subject;
             this.size = size;
             this.from = from;
             this.to = to;
             this.queueItems = queueItems;
             this.id = id;
+            this.teacherName= teacherName;
         }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
 
     public int getId() {
         return id;
