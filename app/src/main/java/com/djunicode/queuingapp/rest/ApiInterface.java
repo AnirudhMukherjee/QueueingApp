@@ -66,9 +66,11 @@ public interface ApiInterface {
   @DELETE("queues/queue/{id}/")
   Call<RecentEvents> deleteRecentEvent(@Path("id") int id);
 
+  @FormUrlEncoded
   @PUT("queues/teacher/login/")
     Call<Teacher> getValidId(@Field("sapId") String sapID, @Field("password") String password);
 
+  @FormUrlEncoded
   @PUT("queues/student/login/")
   Call<Student> getValidIdStudent(@Field("sapID") String sapID, @Field("password") String password);
 

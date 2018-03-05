@@ -159,11 +159,10 @@ public class LogInStudentFragment extends Fragment {
         @Override
         public void onResponse(Call<Student> call, Response<Student> response) {
             if(response.isSuccessful()) {
-                if (Boolean.parseBoolean(response.body().toString())) {
                     trueLogin = true;
-                } else
-                    trueLogin = false;
             }
+            else
+              trueLogin = false;
         }
 
         @Override

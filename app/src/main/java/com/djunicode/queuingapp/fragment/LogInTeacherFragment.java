@@ -155,15 +155,12 @@ public class LogInTeacherFragment extends Fragment {
     call.enqueue(new Callback<Teacher>() {
         @Override
         public void onResponse(Call<Teacher> call, Response<Teacher> response) {
-            if(response.isSuccessful()){
-                if(Boolean.parseBoolean(response.body().toString())){
+            if(response.isSuccessful())
                     trueLogin = true;
-                }
+
                 else
                     trueLogin = false;
             }
-        }
-
         @Override
         public void onFailure(Call<Teacher> call, Throwable t) {
 
