@@ -161,8 +161,10 @@ public class LogInStudentFragment extends Fragment {
             if(response.isSuccessful()) {
                     trueLogin = true;
             }
-            else
-              trueLogin = false;
+            else {
+                trueLogin = false;
+                Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override

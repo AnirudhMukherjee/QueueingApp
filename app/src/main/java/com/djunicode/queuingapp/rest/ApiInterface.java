@@ -49,7 +49,8 @@ public interface ApiInterface {
   @FormUrlEncoded
   @POST("queues/teacher/")
   Call<Teacher> createTeacherAccount(@Field("user") int user_id, @Field("name") String username,
-                                     @Field("sapId") String sapId, @Field("subject")String subject, @Field("location") int location);
+                                     @Field("sapId") String sapId, @Field("subject")String subject, @Field("location") int location,
+                                     @Field("register_id") String Id);
 
   @FormUrlEncoded
   @POST("queues/users/") //Check
